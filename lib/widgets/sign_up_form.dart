@@ -155,8 +155,7 @@ class _SignUpFormState extends State<SignUpForm> {
     final FirebaseUser user = result.user;
 
     if (user == null) {
-      final snackBar = SnackBar(content: Text('Please try again later!'));
-      Scaffold.of(context).showSnackBar(snackBar);
+      simpleSnackbar(context, 'Please try again later!');
     }
   }
 
