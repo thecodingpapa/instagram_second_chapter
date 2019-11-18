@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>171520006840-ntaq10dpcjmc638m4muq6oqiu7ga2ksn.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.171520006840-ntaq10dpcjmc638m4muq6oqiu7ga2ksn</string>
+	<key>API_KEY</key>
+	<string>AIzaSyDP8ronPAvgGpWnK03jAz4HCsg1dAZ53X4</string>
+	<key>GCM_SENDER_ID</key>
+	<string>171520006840</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.thecodingpapa.instagramThecodingpapa</string>
+	<key>PROJECT_ID</key>
+	<string>instagram-clone-second-chapter</string>
+	<key>STORAGE_BUCKET</key>
+	<string>instagram-clone-second-chapter.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:171520006840:ios:ebe3a0a3115e8b1f32b24d</string>
+	<key>DATABASE_URL</key>
+	<string>https://instagram-clone-second-chapter.firebaseio.com</string>
+</dict>
+</plist>

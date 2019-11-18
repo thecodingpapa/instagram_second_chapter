@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "171520006840",
+    "firebase_url": "https://instagram-clone-second-chapter.firebaseio.com",
+    "project_id": "instagram-clone-second-chapter",
+    "storage_bucket": "instagram-clone-second-chapter.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:171520006840:android:355c2c57979425e932b24d",
+        "android_client_info": {
+          "package_name": "com.thecodingpapa.instagram_thecodingpapa"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "171520006840-q8um7l1o8cqofgltorvumnuta555janc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAvMsCJOAqvbm0LjZmOJY2zdkAC9yMKRVU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "171520006840-q8um7l1o8cqofgltorvumnuta555janc.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "171520006840-ntaq10dpcjmc638m4muq6oqiu7ga2ksn.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.thecodingpapa.instagramThecodingpapa"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
