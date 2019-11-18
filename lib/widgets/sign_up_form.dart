@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:instagram_thecodingpapa/constants/size.dart';
 import 'package:instagram_thecodingpapa/main_page.dart';
@@ -9,13 +10,10 @@ class SignUpForm extends StatefulWidget {
 }
 
 class _SignUpFormState extends State<SignUpForm> {
-
-
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   TextEditingController _emailConstroller = TextEditingController();
   TextEditingController _pwConstroller = TextEditingController();
   TextEditingController _cpwConstroller = TextEditingController();
-
 
   @override
   void dispose() {
@@ -38,9 +36,13 @@ class _SignUpFormState extends State<SignUpForm> {
               mainAxisSize: MainAxisSize.max,
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: <Widget>[
-                Spacer(flex: 6,),
+                Spacer(
+                  flex: 6,
+                ),
                 Image.asset("assets/insta_text_logo.png"),
-                Spacer(flex: 1,),
+                Spacer(
+                  flex: 1,
+                ),
                 TextFormField(
                   controller: _emailConstroller,
                   decoration: getTextFieldDecor('Email'),
@@ -51,7 +53,9 @@ class _SignUpFormState extends State<SignUpForm> {
                     return null;
                   },
                 ),
-                Spacer(flex: 1,),
+                Spacer(
+                  flex: 1,
+                ),
                 TextFormField(
                   controller: _pwConstroller,
                   decoration: getTextFieldDecor('Password'),
@@ -62,7 +66,9 @@ class _SignUpFormState extends State<SignUpForm> {
                     return null;
                   },
                 ),
-                Spacer(flex: 1,),
+                Spacer(
+                  flex: 1,
+                ),
                 TextFormField(
                   controller: _cpwConstroller,
                   decoration: getTextFieldDecor('Confirm Password'),
@@ -73,12 +79,13 @@ class _SignUpFormState extends State<SignUpForm> {
                     return null;
                   },
                 ),
-                Spacer(flex: 2,),
+                Spacer(
+                  flex: 2,
+                ),
                 FlatButton(
                   onPressed: () {
-                    if(_formKey.currentState.validate()) {
-                      final route = MaterialPageRoute(builder: (context)=>MainPage());
-                      Navigator.pushReplacement(context, route);
+                    if (_formKey.currentState.validate()) {
+                      _register;
                     }
                   },
                   child: Text(
@@ -90,7 +97,9 @@ class _SignUpFormState extends State<SignUpForm> {
                       borderRadius: BorderRadius.circular(6)),
                   disabledColor: Colors.blue[100],
                 ),
-                Spacer(flex: 2,),
+                Spacer(
+                  flex: 2,
+                ),
                 Stack(
                   alignment: Alignment.center,
                   children: <Widget>[
@@ -110,28 +119,46 @@ class _SignUpFormState extends State<SignUpForm> {
                     Text(
                       'OR',
                       style: TextStyle(
-                          color: Colors.grey,
-                          fontWeight: FontWeight.bold),
+                          color: Colors.grey, fontWeight: FontWeight.bold),
                     )
                   ],
                 ),
-                Spacer(flex: 2,),
+                Spacer(
+                  flex: 2,
+                ),
                 FlatButton.icon(
                     textColor: Colors.blue,
                     onPressed: () {
                       simpleSnackbar(context, 'facebook pressed');
                     },
-                    icon:
-                    ImageIcon(AssetImage("assets/icon/facebook.png")),
+                    icon: ImageIcon(AssetImage("assets/icon/facebook.png")),
                     label: Text("Login with Facebook")),
-                Spacer(flex: 2,),
-                Spacer(flex: 6,),
+                Spacer(
+                  flex: 2,
+                ),
+                Spacer(
+                  flex: 6,
+                ),
               ],
             )),
       ),
     );
   }
 
+  get _register async {
+    final AuthResult result =
+        await FirebaseAuth.instance.createUserWithEmailAndPassword(
+      email: _emailConstroller.text,
+      password: _pwConstroller.text,
+    );
+
+    final FirebaseUser user = result.user;
+
+    if (user == null) {
+      final snackBar = SnackBar(content: Text('Please try again later!'));
+      Scaffold.of(context).showSnackBar(snackBar);
+    }
+  }
 
   InputDecoration getTextFieldDecor(String hint) {
     return InputDecoration(
@@ -153,6 +180,4 @@ class _SignUpFormState extends State<SignUpForm> {
         fillColor: Colors.grey[100],
         filled: true);
   }
-
-
 }
