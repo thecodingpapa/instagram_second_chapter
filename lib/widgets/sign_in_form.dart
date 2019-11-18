@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:instagram_thecodingpapa/constants/size.dart';
 import 'package:instagram_thecodingpapa/main_page.dart';
@@ -9,12 +10,9 @@ class SigninForm extends StatefulWidget {
 }
 
 class _SigninFormState extends State<SigninForm> {
-
-
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   TextEditingController _emailConstroller = TextEditingController();
   TextEditingController _pwConstroller = TextEditingController();
-
 
   @override
   void dispose() {
@@ -36,9 +34,13 @@ class _SigninFormState extends State<SigninForm> {
               mainAxisSize: MainAxisSize.max,
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: <Widget>[
-                Spacer(flex: 6,),
+                Spacer(
+                  flex: 6,
+                ),
                 Image.asset("assets/insta_text_logo.png"),
-                Spacer(flex: 1,),
+                Spacer(
+                  flex: 1,
+                ),
                 TextFormField(
                   controller: _emailConstroller,
                   decoration: getTextFieldDecor('Email'),
@@ -49,8 +51,11 @@ class _SigninFormState extends State<SigninForm> {
                     return null;
                   },
                 ),
-                Spacer(flex: 1,),
+                Spacer(
+                  flex: 1,
+                ),
                 TextFormField(
+                  obscureText: true,
                   controller: _pwConstroller,
                   decoration: getTextFieldDecor('Password'),
                   validator: (String value) {
@@ -60,20 +65,22 @@ class _SigninFormState extends State<SigninForm> {
                     return null;
                   },
                 ),
-                Spacer(flex: 1,),
+                Spacer(
+                  flex: 1,
+                ),
                 Text(
                   "Forgotten password?",
                   textAlign: TextAlign.end,
                   style: TextStyle(
-                      color: Colors.blue[700],
-                      fontWeight: FontWeight.w600),
+                      color: Colors.blue[700], fontWeight: FontWeight.w600),
                 ),
-                Spacer(flex: 2,),
+                Spacer(
+                  flex: 2,
+                ),
                 FlatButton(
                   onPressed: () {
-                    if(_formKey.currentState.validate()) {
-                      final route = MaterialPageRoute(builder: (context)=>MainPage());
-                      Navigator.pushReplacement(context, route);
+                    if (_formKey.currentState.validate()) {
+                      _login;
                     }
                   },
                   child: Text(
@@ -85,7 +92,9 @@ class _SigninFormState extends State<SigninForm> {
                       borderRadius: BorderRadius.circular(6)),
                   disabledColor: Colors.blue[100],
                 ),
-                Spacer(flex: 2,),
+                Spacer(
+                  flex: 2,
+                ),
                 Stack(
                   alignment: Alignment.center,
                   children: <Widget>[
@@ -105,28 +114,45 @@ class _SigninFormState extends State<SigninForm> {
                     Text(
                       'OR',
                       style: TextStyle(
-                          color: Colors.grey,
-                          fontWeight: FontWeight.bold),
+                          color: Colors.grey, fontWeight: FontWeight.bold),
                     )
                   ],
                 ),
-                Spacer(flex: 2,),
+                Spacer(
+                  flex: 2,
+                ),
                 FlatButton.icon(
                     textColor: Colors.blue,
                     onPressed: () {
                       simpleSnackbar(context, 'facebook pressed');
                     },
-                    icon:
-                    ImageIcon(AssetImage("assets/icon/facebook.png")),
+                    icon: ImageIcon(AssetImage("assets/icon/facebook.png")),
                     label: Text("Login with Facebook")),
-                Spacer(flex: 2,),
-                Spacer(flex: 6,),
+                Spacer(
+                  flex: 2,
+                ),
+                Spacer(
+                  flex: 6,
+                ),
               ],
             )),
       ),
     );
   }
 
+  get _login async {
+    final AuthResult result =
+        await FirebaseAuth.instance.signInWithEmailAndPassword(
+      email: _emailConstroller.text,
+      password: _pwConstroller.text,
+    );
+
+    final FirebaseUser user = result.user;
+
+    if (user == null) {
+      simpleSnackbar(context, 'Please try again later!');
+    }
+  }
 
   InputDecoration getTextFieldDecor(String hint) {
     return InputDecoration(
@@ -148,6 +174,4 @@ class _SigninFormState extends State<SigninForm> {
         fillColor: Colors.grey[100],
         filled: true);
   }
-
-
 }

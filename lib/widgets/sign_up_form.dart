@@ -57,6 +57,7 @@ class _SignUpFormState extends State<SignUpForm> {
                   flex: 1,
                 ),
                 TextFormField(
+                  obscureText: true,
                   controller: _pwConstroller,
                   decoration: getTextFieldDecor('Password'),
                   validator: (String value) {
@@ -70,6 +71,7 @@ class _SignUpFormState extends State<SignUpForm> {
                   flex: 1,
                 ),
                 TextFormField(
+                  obscureText: true,
                   controller: _cpwConstroller,
                   decoration: getTextFieldDecor('Confirm Password'),
                   validator: (String value) {
