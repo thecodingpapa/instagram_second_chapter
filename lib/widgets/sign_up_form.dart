@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:instagram_thecodingpapa/constants/size.dart';
 import 'package:instagram_thecodingpapa/main_page.dart';
+import 'package:instagram_thecodingpapa/service/facebook_login.dart';
 import 'package:instagram_thecodingpapa/utils/simple_snack_bar.dart';
 
 class SignUpForm extends StatefulWidget {
@@ -131,7 +132,7 @@ class _SignUpFormState extends State<SignUpForm> {
                 FlatButton.icon(
                     textColor: Colors.blue,
                     onPressed: () {
-                      simpleSnackbar(context, 'facebook pressed');
+                      signInFacebook(context);
                     },
                     icon: ImageIcon(AssetImage("assets/icon/facebook.png")),
                     label: Text("Login with Facebook")),
