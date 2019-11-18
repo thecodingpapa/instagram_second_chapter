@@ -389,6 +389,19 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/Flutter",
 				);
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-l\"sqlite3\"",
+					"-framework",
+					"\"FMDB\"",
+					"-framework",
+					"\"Flutter\"",
+					"-framework",
+					"\"path_provider\"",
+					"-framework",
+					"\"sqflite\"",
+					"-ObjC",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.thecodingpapa.instagramThecodingpapa;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "Runner/Runner-Bridging-Header.h";
@@ -523,6 +536,19 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/Flutter",
 				);
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-l\"sqlite3\"",
+					"-framework",
+					"\"FMDB\"",
+					"-framework",
+					"\"Flutter\"",
+					"-framework",
+					"\"path_provider\"",
+					"-framework",
+					"\"sqflite\"",
+					"-ObjC",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.thecodingpapa.instagramThecodingpapa;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "Runner/Runner-Bridging-Header.h";
@@ -549,6 +575,19 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Flutter",
+				);
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-l\"sqlite3\"",
+					"-framework",
+					"\"FMDB\"",
+					"-framework",
+					"\"Flutter\"",
+					"-framework",
+					"\"path_provider\"",
+					"-framework",
+					"\"sqflite\"",
+					"-ObjC",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.thecodingpapa.instagramThecodingpapa;
 				PRODUCT_NAME = "$(TARGET_NAME)";
