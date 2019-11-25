@@ -24,9 +24,9 @@ class FeedPage extends StatelessWidget {
         actions: <Widget>[
           IconButton(
               onPressed: () {
-                firestoreProvider.sendData().then((_) {
-                  print('data sent to firestore!');
-                });
+//                firestoreProvider.sendData().then((_) {
+//                  print('data sent to firestore!');
+//                });
               },
               icon: ImageIcon(
                 AssetImage('assets/actionbar_camera.png'),
@@ -34,7 +34,7 @@ class FeedPage extends StatelessWidget {
               )),
           IconButton(
               onPressed: () {
-                firestoreProvider.getData();
+//                firestoreProvider.getData();
               },
               icon: ImageIcon(
                 AssetImage('assets/direct_message.png'),

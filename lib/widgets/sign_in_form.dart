@@ -31,17 +31,15 @@ class _SigninFormState extends State<SigninForm> {
         padding: const EdgeInsets.all(common_gap),
         child: Form(
             key: _formKey,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              mainAxisSize: MainAxisSize.max,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
+            child: ListView(
+              shrinkWrap: true,
               children: <Widget>[
-                Spacer(
-                  flex: 6,
+                SizedBox(
+                  height: common_s_gap,
                 ),
                 Image.asset("assets/insta_text_logo.png"),
-                Spacer(
-                  flex: 1,
+                SizedBox(
+                  height: common_xxxs_gap,
                 ),
                 TextFormField(
                   controller: _emailConstroller,
@@ -53,8 +51,8 @@ class _SigninFormState extends State<SigninForm> {
                     return null;
                   },
                 ),
-                Spacer(
-                  flex: 1,
+                SizedBox(
+                  height: common_xxxs_gap,
                 ),
                 TextFormField(
                   obscureText: true,
@@ -67,8 +65,8 @@ class _SigninFormState extends State<SigninForm> {
                     return null;
                   },
                 ),
-                Spacer(
-                  flex: 1,
+                SizedBox(
+                  height: common_xxxs_gap,
                 ),
                 Text(
                   "Forgotten password?",
@@ -76,8 +74,8 @@ class _SigninFormState extends State<SigninForm> {
                   style: TextStyle(
                       color: Colors.blue[700], fontWeight: FontWeight.w600),
                 ),
-                Spacer(
-                  flex: 2,
+                SizedBox(
+                  height: common_xxs_gap,
                 ),
                 FlatButton(
                   onPressed: () {
@@ -94,8 +92,8 @@ class _SigninFormState extends State<SigninForm> {
                       borderRadius: BorderRadius.circular(6)),
                   disabledColor: Colors.blue[100],
                 ),
-                Spacer(
-                  flex: 2,
+                SizedBox(
+                  height: common_xxs_gap,
                 ),
                 Stack(
                   alignment: Alignment.center,
@@ -120,8 +118,8 @@ class _SigninFormState extends State<SigninForm> {
                     )
                   ],
                 ),
-                Spacer(
-                  flex: 2,
+                SizedBox(
+                  height: common_xxs_gap,
                 ),
                 FlatButton.icon(
                     textColor: Colors.blue,
@@ -130,11 +128,11 @@ class _SigninFormState extends State<SigninForm> {
                     },
                     icon: ImageIcon(AssetImage("assets/icon/facebook.png")),
                     label: Text("Login with Facebook")),
-                Spacer(
-                  flex: 2,
+                SizedBox(
+                  height: common_xxs_gap,
                 ),
-                Spacer(
-                  flex: 6,
+                SizedBox(
+                  height: common_s_gap,
                 ),
               ],
             )),
