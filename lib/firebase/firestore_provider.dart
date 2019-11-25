@@ -1,8 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:instagram_thecodingpapa/constants/firebase_keys.dart';
 import 'package:instagram_thecodingpapa/data/user.dart';
+import 'package:instagram_thecodingpapa/firebase/transformer.dart';
 
-class FirestoreProvider {
+class FirestoreProvider with Transformer {
   final Firestore _firestore = Firestore.instance;
 
   Future<void> attemptCreateUser({String userKey, String email}) {
@@ -16,6 +17,14 @@ class FirestoreProvider {
         await tx.set(userRef, User.getMapForCreateUser(email));
       }
     });
+  }
+
+  Stream<User> connectMyUserData(String userKey) {
+    return _firestore
+        .collection(COLLECTION_USERS)
+        .document(userKey)
+        .snapshots()
+        .transform(toUser);
   }
 
 //  Future<void> sendData() {
