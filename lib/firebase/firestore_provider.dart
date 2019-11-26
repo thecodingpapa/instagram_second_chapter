@@ -27,6 +27,13 @@ class FirestoreProvider with Transformer {
         .transform(toUser);
   }
 
+  Stream<List<User>> fetchAllUsers() {
+    return _firestore
+        .collection(COLLECTION_USERS)
+        .snapshots()
+        .transform(toUsers);
+  }
+
 //  Future<void> sendData() {
 //    return Firestore.instance
 //        .collection(COLLECTION_USERS)
