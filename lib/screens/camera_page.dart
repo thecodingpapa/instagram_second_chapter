@@ -1,6 +1,13 @@
+import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
+import 'package:instagram_thecodingpapa/constants/size.dart';
+import 'package:instagram_thecodingpapa/widgets/my_progress_indicator.dart';
 
 class CameraPage extends StatefulWidget {
+  final CameraDescription camera;
+
+  const CameraPage({Key key, @required this.camera}) : super(key: key);
+
   @override
   _CameraPageState createState() => _CameraPageState();
 }
@@ -8,6 +15,18 @@ class CameraPage extends StatefulWidget {
 class _CameraPageState extends State<CameraPage> {
   int _selectedIndex = 1;
   var _pageController = PageController(initialPage: 1);
+  CameraController _controller;
+  Future<void> _initializeControllerFuture;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = CameraController(
+      widget.camera,
+      ResolutionPreset.medium,
+    );
+    _initializeControllerFuture = _controller.initialize();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -71,12 +90,45 @@ class _CameraPageState extends State<CameraPage> {
   }
 
   Widget _gellaryPage() {
-    return Container(color: Colors.green,);
+    return Container(
+      color: Colors.green,
+    );
   }
+
   Widget _takePhotoPage() {
-    return Container(color: Colors.purple,);
+    return FutureBuilder<void>(
+        future: _initializeControllerFuture,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.done)
+            return Column(
+              children: <Widget>[
+                Container(
+                  width: size.width,
+                  height: size.width,
+                  child: ClipRect(
+                    child: OverflowBox(
+                      alignment: Alignment.topCenter,
+                      child: FittedBox(
+                        fit: BoxFit.fitWidth,
+                        child: Container(
+                          width: size.width,
+                          height: size.width / _controller.value.aspectRatio,
+                          child: CameraPreview(
+                              _controller), // this is my CameraPreview
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            );
+          return MyProgressIndicator();
+        });
   }
+
   Widget _takeVideoPage() {
-    return Container(color: Colors.deepOrange,);
+    return Container(
+      color: Colors.deepOrange,
+    );
   }
 }

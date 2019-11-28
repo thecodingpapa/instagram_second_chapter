@@ -12,7 +12,7 @@ class FirestoreProvider with Transformer {
     return _firestore.runTransaction((Transaction tx) async {
       DocumentSnapshot snapshot = await tx.get(userRef);
       if (snapshot.exists) {
-        return;
+        await tx.update(userRef, snapshot.data);
       } else {
         await tx.set(userRef, User.getMapForCreateUser(email));
       }

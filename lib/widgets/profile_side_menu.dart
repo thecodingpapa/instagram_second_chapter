@@ -1,7 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:instagram_thecodingpapa/constants/size.dart';
-import 'package:instagram_thecodingpapa/screens/auth_page.dart';
+import 'package:instagram_thecodingpapa/data/provider/my_user_data.dart';
+import 'package:provider/provider.dart';
 
 class ProfileSideMenu extends StatelessWidget {
   @override
@@ -26,6 +27,7 @@ class ProfileSideMenu extends StatelessWidget {
           ),
           FlatButton.icon(
               onPressed: () {
+                Provider.of<MyUserData>(context).clearUser();
                 FirebaseAuth.instance.signOut();
               },
               icon: Icon(Icons.exit_to_app),

@@ -1,15 +1,18 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:instagram_thecodingpapa/constants/size.dart';
+import 'package:instagram_thecodingpapa/data/provider/my_user_data.dart';
 import 'package:instagram_thecodingpapa/utils/profile_img_path.dart';
 import 'package:instagram_thecodingpapa/widgets/profile_side_menu.dart';
+import 'package:provider/provider.dart';
 
 class ProfilePage extends StatefulWidget {
   @override
   _ProfilePageState createState() => _ProfilePageState();
 }
 
-class _ProfilePageState extends State<ProfilePage> with SingleTickerProviderStateMixin{
+class _ProfilePageState extends State<ProfilePage>
+    with SingleTickerProviderStateMixin {
   AnimationController _animationController;
   bool _menuOpened = false;
   double menuWidth;
@@ -21,7 +24,8 @@ class _ProfilePageState extends State<ProfilePage> with SingleTickerProviderStat
 
   @override
   void initState() {
-    _animationController = AnimationController(vsync: this, duration: Duration(milliseconds: duration));
+    _animationController = AnimationController(
+        vsync: this, duration: Duration(milliseconds: duration));
     super.initState();
   }
 
@@ -30,7 +34,6 @@ class _ProfilePageState extends State<ProfilePage> with SingleTickerProviderStat
     _animationController.dispose();
     super.dispose();
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -91,7 +94,7 @@ class _ProfilePageState extends State<ProfilePage> with SingleTickerProviderStat
                     _editProfileBtn(),
                     _getTabIconButtons,
                     _getAnimatedSelectedBar,
-                      ])),
+                  ])),
                   _getImageGrid(context)
                 ],
               ),
@@ -102,9 +105,8 @@ class _ProfilePageState extends State<ProfilePage> with SingleTickerProviderStat
     );
   }
 
-
   SliverToBoxAdapter _getImageGrid(BuildContext context) => SliverToBoxAdapter(
-      child: Stack(
+          child: Stack(
         children: <Widget>[
           AnimatedContainer(
             transform: Matrix4.translationValues(_gridMargin, 0, 0),
@@ -119,61 +121,60 @@ class _ProfilePageState extends State<ProfilePage> with SingleTickerProviderStat
             child: _imageGrid,
           )
         ],
-      )
-  );
+      ));
 
   GridView get _imageGrid => GridView.count(
-      physics: NeverScrollableScrollPhysics(),
-      shrinkWrap: true,
-      crossAxisCount: 3,
-      childAspectRatio: 1,
-      children: List.generate(30, (index) => _gridImgItem(index)
-      ),
-    );
+        physics: NeverScrollableScrollPhysics(),
+        shrinkWrap: true,
+        crossAxisCount: 3,
+        childAspectRatio: 1,
+        children: List.generate(30, (index) => _gridImgItem(index)),
+      );
 
   CachedNetworkImage _gridImgItem(int index) => CachedNetworkImage(
-          fit: BoxFit.cover,
-          imageUrl: "https://picsum.photos/id/$index/100/100");
-
-
+      fit: BoxFit.cover, imageUrl: "https://picsum.photos/id/$index/100/100");
 
   Padding _editProfileBtn() {
     return Padding(
-                      padding: const EdgeInsets.all(common_gap),
-                      child: SizedBox(
-                        height: 24,
-                        child: OutlineButton(
-                            onPressed: () {},
-                            borderSide: BorderSide(color: Colors.black45),
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(6)),
-                            child: Text(
-                              'Edit Profile',
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                              ),
-                            )),
-                      ));
+        padding: const EdgeInsets.all(common_gap),
+        child: SizedBox(
+          height: 24,
+          child: OutlineButton(
+              onPressed: () {},
+              borderSide: BorderSide(color: Colors.black45),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(6)),
+              child: Text(
+                'Edit Profile',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                ),
+              )),
+        ));
   }
 
   Padding _userBio() {
     return Padding(
-                    padding: const EdgeInsets.only(left: common_gap),
-                    child: Text(
-                      'Bio from User. So Say something.',
-                      style: TextStyle(fontWeight: FontWeight.w400),
-                    ),
-                  );
+      padding: const EdgeInsets.only(left: common_gap),
+      child: Text(
+        'Bio from User. So Say something.',
+        style: TextStyle(fontWeight: FontWeight.w400),
+      ),
+    );
   }
 
   Padding _username() {
     return Padding(
-                    padding: const EdgeInsets.only(left: common_gap),
-                    child: Text(
-                      'User Real Name',
-                      style: TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                  );
+      padding: const EdgeInsets.only(left: common_gap),
+      child: Consumer<MyUserData>(
+        builder: (context, myUserData, child) {
+          return Text(
+            myUserData.data.username,
+            style: TextStyle(fontWeight: FontWeight.bold),
+          );
+        },
+      ),
+    );
   }
 
   Row get _getProfileHeader => Row(
@@ -248,7 +249,9 @@ class _ProfilePageState extends State<ProfilePage> with SingleTickerProviderStat
             semanticLabel: 'Show menu',
           ),
           onPressed: () {
-            _menuOpened ? _animationController.reverse() : _animationController.forward();
+            _menuOpened
+                ? _animationController.reverse()
+                : _animationController.forward();
             setState(() {
               _menuOpened = !_menuOpened;
             });
@@ -258,39 +261,43 @@ class _ProfilePageState extends State<ProfilePage> with SingleTickerProviderStat
     );
   }
 
-
   Widget get _getTabIconButtons => Row(
-    children: <Widget>[
-      Expanded(
-        child: IconButton(
-            icon: ImageIcon(AssetImage("assets/grid.png"), color: _tabIconGridSelected?Colors.black:Colors.black26,),
-            onPressed: () {
-              _setTab(true);
-            }),
-      ),
-      Expanded(
-          child: IconButton(
-              icon: ImageIcon(AssetImage("assets/saved.png"), color: _tabIconGridSelected?Colors.black26:Colors.black,),
-              onPressed: () {
-                _setTab(false);
-              })),
-    ],
-  );
-
+        children: <Widget>[
+          Expanded(
+            child: IconButton(
+                icon: ImageIcon(
+                  AssetImage("assets/grid.png"),
+                  color: _tabIconGridSelected ? Colors.black : Colors.black26,
+                ),
+                onPressed: () {
+                  _setTab(true);
+                }),
+          ),
+          Expanded(
+              child: IconButton(
+                  icon: ImageIcon(
+                    AssetImage("assets/saved.png"),
+                    color: _tabIconGridSelected ? Colors.black26 : Colors.black,
+                  ),
+                  onPressed: () {
+                    _setTab(false);
+                  })),
+        ],
+      );
 
   Widget get _getAnimatedSelectedBar => AnimatedContainer(
-    alignment: tabAlign,
-    duration: Duration(milliseconds: duration),
-    curve: Curves.easeInOut,
-    color: Colors.transparent,
-    height: 1,
-    width: size.width,
-    child: Container(
-      height: 1,
-      width: size.width / 2,
-      color: Colors.black87,
-    ),
-  );
+        alignment: tabAlign,
+        duration: Duration(milliseconds: duration),
+        curve: Curves.easeInOut,
+        color: Colors.transparent,
+        height: 1,
+        width: size.width,
+        child: Container(
+          height: 1,
+          width: size.width / 2,
+          color: Colors.black87,
+        ),
+      );
 
   _setTab(bool tabLeft) {
     setState(() {
@@ -299,7 +306,6 @@ class _ProfilePageState extends State<ProfilePage> with SingleTickerProviderStat
         this._tabIconGridSelected = true;
         this._gridMargin = 0;
         this._myImgGridMargin = size.width;
-
       } else {
         this.tabAlign = Alignment.centerRight;
         this._tabIconGridSelected = false;
@@ -308,5 +314,4 @@ class _ProfilePageState extends State<ProfilePage> with SingleTickerProviderStat
       }
     });
   }
-
 }
