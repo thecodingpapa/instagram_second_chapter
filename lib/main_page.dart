@@ -1,11 +1,13 @@
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:instagram_thecodingpapa/constants/size.dart';
+import 'package:instagram_thecodingpapa/data/provider/my_user_data.dart';
 import 'package:instagram_thecodingpapa/screens/camera_page.dart';
 import 'package:instagram_thecodingpapa/screens/feed_page.dart';
 import 'package:instagram_thecodingpapa/screens/profile_page.dart';
 import 'package:instagram_thecodingpapa/screens/search_page.dart';
 import 'package:instagram_thecodingpapa/widgets/my_progress_indicator.dart';
+import 'package:provider/provider.dart';
 
 class MainPage extends StatefulWidget {
   @override
@@ -94,6 +96,7 @@ class _MainPageState extends State<MainPage> {
       MaterialPageRoute(
           builder: (context) => CameraPage(
                 camera: firstCamera,
+                user: Provider.of<MyUserData>(context).data,
               )),
     );
   }

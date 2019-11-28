@@ -1,12 +1,20 @@
+import 'dart:io';
+
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:instagram_thecodingpapa/constants/size.dart';
+import 'package:instagram_thecodingpapa/data/user.dart';
+import 'package:instagram_thecodingpapa/screens/share_post_page.dart';
 import 'package:instagram_thecodingpapa/widgets/my_progress_indicator.dart';
+import 'package:path/path.dart';
+import 'package:path_provider/path_provider.dart';
 
 class CameraPage extends StatefulWidget {
   final CameraDescription camera;
+  final User user;
 
-  const CameraPage({Key key, @required this.camera}) : super(key: key);
+  const CameraPage({Key key, @required this.camera, @required this.user})
+      : super(key: key);
 
   @override
   _CameraPageState createState() => _CameraPageState();
@@ -26,6 +34,12 @@ class _CameraPageState extends State<CameraPage> {
       ResolutionPreset.medium,
     );
     _initializeControllerFuture = _controller.initialize();
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
   }
 
   @override
@@ -120,6 +134,25 @@ class _CameraPageState extends State<CameraPage> {
                     ),
                   ),
                 ),
+                Expanded(
+                  child: GestureDetector(
+                    onTap: () {
+                      _attemptTakePhoto(context);
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Center(
+                        child: Container(
+                          decoration: ShapeDecoration(
+                            shape: CircleBorder(
+                                side: BorderSide(
+                                    color: Colors.grey[300], width: 20)),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                )
               ],
             );
           return MyProgressIndicator();
@@ -130,5 +163,27 @@ class _CameraPageState extends State<CameraPage> {
     return Container(
       color: Colors.deepOrange,
     );
+  }
+
+  void _attemptTakePhoto(BuildContext context) async {
+    try {
+      await _initializeControllerFuture;
+      final path = join(
+        (await getTemporaryDirectory()).path,
+        '${DateTime.now()}_${widget.user.username}.png',
+      );
+
+      await _controller.takePicture(path);
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => SharePostPage(
+            imgFile: File(path),
+          ),
+        ),
+      );
+    } catch (e) {
+      print(e);
+    }
   }
 }
