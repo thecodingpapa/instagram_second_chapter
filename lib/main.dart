@@ -13,33 +13,32 @@ void main() {
       builder: (context) => MyUserData(), child: MyApp()));
 }
 
-bool isItFirstData = true;
-
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: StreamBuilder<FirebaseUser>(
-          stream: FirebaseAuth.instance.onAuthStateChanged,
-          builder: (context, snapshot) {
-            if (isItFirstData) {
-              isItFirstData = false;
+      home: Consumer<MyUserData>(
+        builder: (context, myUserData, child) {
+          switch (myUserData.status) {
+            case MyUserDataStatus.progress:
+              FirebaseAuth.instance.currentUser().then((firebaseUser) {
+                if (firebaseUser == null)
+                  myUserData.setNewStatus(MyUserDataStatus.none);
+                else
+                  firestoreProvider
+                      .connectMyUserData(firebaseUser.uid)
+                      .listen((user) {
+                    myUserData.setUserData(user);
+                  });
+              });
               return MyProgressIndicator();
-            } else {
-              if (snapshot.hasData) {
-                firestoreProvider.attemptCreateUser(
-                    userKey: snapshot.data.uid, email: snapshot.data.email);
-                var myUserData = Provider.of<MyUserData>(context);
-                firestoreProvider
-                    .connectMyUserData(snapshot.data.uid)
-                    .listen((user) {
-                  myUserData.setUserData(user);
-                });
-                return MainPage();
-              }
+            case MyUserDataStatus.exist:
+              return MainPage();
+            default:
               return AuthPage();
-            }
-          }),
+          }
+        },
+      ),
       theme: ThemeData(primarySwatch: white),
     );
   }

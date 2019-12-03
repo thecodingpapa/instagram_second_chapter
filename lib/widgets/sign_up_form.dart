@@ -1,9 +1,12 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:instagram_thecodingpapa/constants/size.dart';
+import 'package:instagram_thecodingpapa/data/provider/my_user_data.dart';
+import 'package:instagram_thecodingpapa/firebase/firestore_provider.dart';
 import 'package:instagram_thecodingpapa/main_page.dart';
 import 'package:instagram_thecodingpapa/service/facebook_login.dart';
 import 'package:instagram_thecodingpapa/utils/simple_snack_bar.dart';
+import 'package:provider/provider.dart';
 
 class SignUpForm extends StatefulWidget {
   @override
@@ -157,6 +160,10 @@ class _SignUpFormState extends State<SignUpForm> {
 
     if (user == null) {
       simpleSnackbar(context, 'Please try again later!');
+    } else {
+      await firestoreProvider.attemptCreateUser(
+          userKey: user.uid, email: user.email);
+      Provider.of<MyUserData>(context).setNewStatus(MyUserDataStatus.progress);
     }
   }
 
