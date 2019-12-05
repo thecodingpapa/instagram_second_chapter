@@ -1,6 +1,8 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:flutter_tags/tag.dart';
 import 'package:instagram_thecodingpapa/constants/size.dart';
+import 'package:instagram_thecodingpapa/widgets/share_switch.dart';
 
 class SharePostPage extends StatefulWidget {
   final File imgFile;
@@ -29,8 +31,88 @@ class _SharePostPageState extends State<SharePostPage> {
       body: ListView(
         children: <Widget>[
           _thumbnailNCaption(),
+          _divider,
+          _sectionTitle(context, "Tag People"),
+          _divider,
+          _sectionTitle(context, "Add Location"),
+          _divider,
+          _addLocationTags(),
+          _divider,
+          _sectionTitle(context, "Also post to"),
+          ShareSwitch(label: 'Facebook'),
+          ShareSwitch(label: 'Twitter'),
+          ShareSwitch(label: 'Tumblr'),
         ],
       ),
+    );
+  }
+
+  Widget _sectionTitle(BuildContext context, String title) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: common_gap),
+      child: Text(
+        title,
+        style: Theme.of(context).textTheme.subtitle,
+      ),
+    );
+  }
+
+  Divider get _divider => Divider(
+        color: Colors.grey[200],
+        thickness: 1,
+      );
+
+  Tags _addLocationTags() {
+    List<String> _items = [
+      "approval",
+      "pigeon",
+      "brown",
+      "expenditure",
+      "compromise",
+      "citizen",
+      "inspire",
+      "relieve",
+      "grave",
+      "incredible",
+      "invasion",
+      "voucher",
+      "girl",
+      "relax",
+      "problem",
+      "queue",
+      "aviation",
+      "profile",
+      "palace",
+      "drive",
+      "money",
+      "revolutionary",
+      "string",
+      "detective",
+      "follow",
+      "text",
+      "bet",
+      "decade",
+      "means",
+      "gossip"
+    ];
+    return Tags(
+      horizontalScroll: true,
+      itemCount: _items.length,
+      itemBuilder: (int index) {
+        final item = _items[index];
+
+        return ItemTags(
+          key: Key(index.toString()),
+          index: index,
+          title: item,
+          activeColor: Colors.grey[200],
+          textActiveColor: Colors.black54,
+          textStyle: TextStyle(
+            fontSize: 13,
+          ),
+          borderRadius: BorderRadius.circular(3),
+        );
+      },
     );
   }
 
