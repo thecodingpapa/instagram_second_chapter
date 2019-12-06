@@ -1,7 +1,10 @@
 import 'dart:io';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_tags/tag.dart';
 import 'package:instagram_thecodingpapa/constants/size.dart';
+import 'package:instagram_thecodingpapa/isolates/resize_image.dart';
+import 'package:instagram_thecodingpapa/widgets/my_progress_indicator.dart';
 import 'package:instagram_thecodingpapa/widgets/share_switch.dart';
 
 class SharePostPage extends StatefulWidget {
@@ -17,6 +20,7 @@ class SharePostPage extends StatefulWidget {
 
 class _SharePostPageState extends State<SharePostPage> {
   TextEditingController captionController = TextEditingController();
+  bool _isImgProcessing = false;
 
   @override
   void dispose() {
@@ -26,25 +30,62 @@ class _SharePostPageState extends State<SharePostPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: _appBar(),
-      body: ListView(
-        children: <Widget>[
-          _thumbnailNCaption(),
-          _divider,
-          _sectionTitle(context, "Tag People"),
-          _divider,
-          _sectionTitle(context, "Add Location"),
-          _divider,
-          _addLocationTags(),
-          _divider,
-          _sectionTitle(context, "Also post to"),
-          ShareSwitch(label: 'Facebook'),
-          ShareSwitch(label: 'Twitter'),
-          ShareSwitch(label: 'Tumblr'),
-        ],
-      ),
+    return Stack(
+      children: <Widget>[
+        IgnorePointer(
+          ignoring: _isImgProcessing,
+          child: Scaffold(
+            appBar: _appBar(),
+            body: ListView(
+              children: <Widget>[
+                _thumbnailNCaption(),
+                _divider,
+                _sectionTitle(context, "Tag People"),
+                _divider,
+                _sectionTitle(context, "Add Location"),
+                _divider,
+                _addLocationTags(),
+                _divider,
+                _sectionTitle(context, "Also post to"),
+                ShareSwitch(label: 'Facebook'),
+                ShareSwitch(label: 'Twitter'),
+                ShareSwitch(label: 'Tumblr'),
+              ],
+            ),
+          ),
+        ),
+        Visibility(
+          visible: _isImgProcessing,
+          child: Container(
+            color: Colors.black54,
+            child: Center(
+              child: MyProgressIndicator(),
+            ),
+          ),
+        )
+      ],
     );
+  }
+
+  void _uploadImageNCreateNewPost() async {
+    setState(() {
+      _isImgProcessing = true;
+    });
+
+    try {
+      final File resized = await compute(getResizedImage, widget.imgFile);
+      widget.imgFile
+          .length()
+          .then((lenth) => print('image size before: $lenth'));
+      resized.length().then((lenth) {
+        print('image size: $lenth');
+        setState(() {
+          _isImgProcessing = false;
+        });
+      });
+    } catch (e) {
+      print(e.toString());
+    }
   }
 
   Widget _sectionTitle(BuildContext context, String title) {
@@ -122,7 +163,9 @@ class _SharePostPageState extends State<SharePostPage> {
       title: Text("New Post"),
       actions: <Widget>[
         FlatButton(
-            onPressed: null,
+            onPressed: () {
+              _uploadImageNCreateNewPost();
+            },
             child: Text(
               "Share",
               textScaleFactor: 1.4,

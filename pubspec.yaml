@@ -32,6 +32,7 @@ dependencies:
   cloud_firestore: ^0.12.10+2
   provider: ^3.1.0+1
   flutter_tags: ^0.4.3
+  image: ^2.1.9
 
 dev_dependencies:
   flutter_test:
