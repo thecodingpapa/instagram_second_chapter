@@ -183,6 +183,7 @@ class _CameraPageState extends State<CameraPage> {
           builder: (context) => SharePostPage(
             imgFile: File(path),
             postKey: postKey,
+            user: widget.user,
           ),
         ),
       );
