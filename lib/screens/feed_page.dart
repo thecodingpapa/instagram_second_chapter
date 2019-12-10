@@ -1,10 +1,10 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:instagram_thecodingpapa/constants/size.dart';
-import 'package:instagram_thecodingpapa/firebase/firestore_provider.dart';
 import 'package:instagram_thecodingpapa/utils/profile_img_path.dart';
 import 'package:instagram_thecodingpapa/widgets/comment.dart';
 import 'package:instagram_thecodingpapa/widgets/my_progress_indicator.dart';
+import 'package:instagram_thecodingpapa/firebase/firebase_storage.dart';
 
 class FeedPage extends StatelessWidget {
   @override
@@ -151,20 +151,29 @@ class FeedPage extends StatelessWidget {
     );
   }
 
-  CachedNetworkImage _postImage(int index) {
-    return CachedNetworkImage(
-      imageUrl: 'https://picsum.photos/id/$index/200/200',
-      placeholder: (context, url) {
-        return new MyProgressIndicator();
-      },
-      imageBuilder: (BuildContext context, ImageProvider imageProvider) =>
-          AspectRatio(
-        aspectRatio: 1,
-        child: Container(
-          decoration: BoxDecoration(
-              image: DecorationImage(image: imageProvider, fit: BoxFit.cover)),
-        ),
-      ),
-    );
+  Widget _postImage(int index) {
+    return FutureBuilder<dynamic>(
+        future: storageProvider
+            .getPostImageUri("1575861006177_QGuojsvLk4MUe690lAbfTqCSI9y1"),
+        builder: (context, snapshot) {
+          if (snapshot.hasData)
+            return CachedNetworkImage(
+              imageUrl: snapshot.data,
+              placeholder: (context, url) {
+                return new MyProgressIndicator();
+              },
+              imageBuilder:
+                  (BuildContext context, ImageProvider imageProvider) =>
+                      AspectRatio(
+                aspectRatio: 1,
+                child: Container(
+                  decoration: BoxDecoration(
+                      image: DecorationImage(
+                          image: imageProvider, fit: BoxFit.cover)),
+                ),
+              ),
+            );
+          return MyProgressIndicator();
+        });
   }
 }

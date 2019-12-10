@@ -1,9 +1,12 @@
 import 'dart:io';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_tags/tag.dart';
 import 'package:instagram_thecodingpapa/constants/size.dart';
+import 'package:instagram_thecodingpapa/firebase/firebase_storage.dart';
 import 'package:instagram_thecodingpapa/isolates/resize_image.dart';
+import 'package:instagram_thecodingpapa/utils/post_path.dart';
 import 'package:instagram_thecodingpapa/widgets/my_progress_indicator.dart';
 import 'package:instagram_thecodingpapa/widgets/share_switch.dart';
 
@@ -11,7 +14,7 @@ class SharePostPage extends StatefulWidget {
   final File imgFile;
   final String postKey;
 
-  const SharePostPage({Key key, @required this.imgFile, this.postKey})
+  const SharePostPage({Key key, @required this.imgFile, @required this.postKey})
       : super(key: key);
 
   @override
@@ -74,14 +77,10 @@ class _SharePostPageState extends State<SharePostPage> {
 
     try {
       final File resized = await compute(getResizedImage, widget.imgFile);
-      widget.imgFile
-          .length()
-          .then((lenth) => print('image size before: $lenth'));
-      resized.length().then((lenth) {
-        print('image size: $lenth');
-        setState(() {
-          _isImgProcessing = false;
-        });
+
+      await storageProvider.uploadImg(resized, getImgPath(widget.postKey));
+      setState(() {
+        _isImgProcessing = false;
       });
     } catch (e) {
       print(e.toString());

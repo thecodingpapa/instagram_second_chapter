@@ -166,6 +166,9 @@ class _CameraPageState extends State<CameraPage> {
   }
 
   void _attemptTakePhoto(BuildContext context) async {
+    final String postKey =
+        "${DateTime.now().millisecondsSinceEpoch}_${widget.user.userKey}";
+
     try {
       await _initializeControllerFuture;
       final path = join(
@@ -179,6 +182,7 @@ class _CameraPageState extends State<CameraPage> {
         MaterialPageRoute(
           builder: (context) => SharePostPage(
             imgFile: File(path),
+            postKey: postKey,
           ),
         ),
       );
