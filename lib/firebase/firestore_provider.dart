@@ -57,6 +57,24 @@ class FirestoreProvider with Transformer {
 //      print(ds.data);
 //    });
 //  }
+
+//Post
+
+  Future<Map<String,dynamic>> createNewPost(String postKey, Map<String, dynamic> postData) {
+    final DocumentReference postRef =
+        _firestore.collection(COLLECTION_POSTS).document(postKey);
+    final DocumentReference userRef =
+        _firestore.collection(COLLECTION_USERS).document(postData[KEY_USERKEY]);
+    return _firestore.runTransaction((Transaction tx) async {
+      await tx.update(userRef, {
+        KEY_MYPOSTS: FieldValue.arrayUnion([postKey])
+      });
+      DocumentSnapshot postSnapshot = await tx.get(postRef);
+      if(!postSnapshot.exists){
+        await tx.set(postRef, postData);
+      }
+    });
+  }
 }
 
 FirestoreProvider firestoreProvider = FirestoreProvider();
