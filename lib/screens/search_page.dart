@@ -40,8 +40,14 @@ class SearchPage extends StatelessWidget {
       builder: (context, myUserData, child) {
         bool isFollowing = myUserData.amIFollowingThisUser(user.userKey);
         return ListTile(
-          onTap: (){
-            isFollowing?
+          onTap: () {
+            isFollowing
+                ? firestoreProvider.unfollowUser(
+                    myUserKey: myUserData.data.userKey,
+                    otherUserKey: user.userKey)
+                : firestoreProvider.followUser(
+                    myUserKey: myUserData.data.userKey,
+                    otherUserKey: user.userKey);
           },
           leading: CircleAvatar(
             radius: profile_radius,
@@ -60,7 +66,8 @@ class SearchPage extends StatelessWidget {
               child: Text(
                 isFollowing ? "following" : "not yet",
                 style: TextStyle(
-                    fontWeight: FontWeight.bold, color: Colors.red[700]),
+                    fontWeight: FontWeight.bold,
+                    color: isFollowing ? Colors.blue[700] : Colors.red[700]),
               )),
         );
       },
