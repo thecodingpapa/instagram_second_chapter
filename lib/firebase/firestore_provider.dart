@@ -76,6 +76,59 @@ class FirestoreProvider with Transformer {
       }
     });
   }
+
+  //Follow unfollow
+  Future<Map<String, dynamic>> followUser(
+      {String myUserKey, String otherUserKey}) async {
+    //my doc ref&snapshot
+    final DocumentReference myUserRef =
+        _firestore.collection(COLLECTION_USERS).document(myUserKey);
+    DocumentSnapshot myUserSnapshot = await myUserRef.get();
+
+    //other doc ref&snapshot
+    final DocumentReference otherUserRef =
+        _firestore.collection(COLLECTION_USERS).document(otherUserKey);
+    DocumentSnapshot otherUserSnapshot = await otherUserRef.get();
+
+    //run transaction
+    return _firestore.runTransaction((Transaction tx) async {
+      if (myUserSnapshot.exists && otherUserSnapshot.exists) {
+        await tx.update(myUserRef, <String, dynamic>{
+          KEY_FOLLOWINGS: FieldValue.arrayUnion([otherUserKey])
+        });
+
+        int currentFollowers = otherUserSnapshot.data[KEY_FOLLOWERS];
+        await tx.update(otherUserRef,
+            <String, dynamic>{KEY_FOLLOWERS: currentFollowers + 1});
+      }
+    });
+  }
+
+  Future<Map<String, dynamic>> unfollowUser(
+      {String myUserKey, String otherUserKey}) async {
+    //my doc ref&snapshot
+    final DocumentReference myUserRef =
+        _firestore.collection(COLLECTION_USERS).document(myUserKey);
+    DocumentSnapshot myUserSnapshot = await myUserRef.get();
+
+    //other doc ref&snapshot
+    final DocumentReference otherUserRef =
+        _firestore.collection(COLLECTION_USERS).document(otherUserKey);
+    DocumentSnapshot otherUserSnapshot = await otherUserRef.get();
+
+    //run transaction
+    return _firestore.runTransaction((Transaction tx) async {
+      if (myUserSnapshot.exists && otherUserSnapshot.exists) {
+        await tx.update(myUserRef, <String, dynamic>{
+          KEY_FOLLOWINGS: FieldValue.arrayRemove([otherUserKey])
+        });
+
+        int currentFollowers = otherUserSnapshot.data[KEY_FOLLOWERS];
+        await tx.update(otherUserRef,
+            <String, dynamic>{KEY_FOLLOWERS: currentFollowers - 1});
+      }
+    });
+  }
 }
 
 FirestoreProvider firestoreProvider = FirestoreProvider();

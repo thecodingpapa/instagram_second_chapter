@@ -24,6 +24,10 @@ class MyUserData extends ChangeNotifier {
     _myUserDataStatus = MyUserDataStatus.none;
     notifyListeners();
   }
+
+  bool amIFollowingThisUser(String userKey) {
+    return _myUserData.followings.contains(userKey);
+  }
 }
 
 enum MyUserDataStatus { progress, none, exist }
