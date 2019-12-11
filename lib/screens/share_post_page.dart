@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_tags/tag.dart';
@@ -97,6 +96,8 @@ class _SharePostPageState extends State<SharePostPage> {
       setState(() {
         _isImgProcessing = false;
       });
+
+      Navigator.of(context).pop();
     } catch (e) {
       print(e.toString());
     }
