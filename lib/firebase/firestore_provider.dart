@@ -1,7 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:instagram_thecodingpapa/constants/firebase_keys.dart';
+import 'package:instagram_thecodingpapa/data/post.dart';
 import 'package:instagram_thecodingpapa/data/user.dart';
 import 'package:instagram_thecodingpapa/firebase/transformer.dart';
+import 'package:rxdart/rxdart.dart';
 
 class FirestoreProvider with Transformer {
   final Firestore _firestore = Firestore.instance;
@@ -127,6 +129,28 @@ class FirestoreProvider with Transformer {
         await tx.update(otherUserRef,
             <String, dynamic>{KEY_FOLLOWERS: currentFollowers - 1});
       }
+    });
+  }
+
+  Observable<List<Post>> fetchAllPostFromFollowers(List<dynamic> followings) {
+    final CollectionReference collectionReference =
+        _firestore.collection(COLLECTION_POSTS);
+
+    List<Stream<List<Post>>> streams = [];
+
+    for (int i = 0; i < followings.length; i++) {
+      streams.add(collectionReference
+          .where(KEY_USERKEY, isEqualTo: followings[i])
+          .snapshots()
+          .transform(toPosts));
+    }
+
+    return Observable.combineLatest(streams, (listOfPosts) {
+      List<Post> combinedPosts = [];
+      for (List<Post> posts in listOfPosts) {
+        combinedPosts.addAll(posts);
+      }
+      return combinedPosts;
     });
   }
 }

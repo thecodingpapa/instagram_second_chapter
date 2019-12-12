@@ -5,12 +5,12 @@ import 'package:instagram_thecodingpapa/utils/post_path.dart';
 class StorageProvider {
   final FirebaseStorage _firebaseStorage = FirebaseStorage();
 
-  Future<StorageTaskSnapshot> uploadImg(File image, String path) {
+  Future<dynamic> uploadImg(File image, String path) async {
     final StorageReference storageReference =
         _firebaseStorage.ref().child(path);
     final StorageUploadTask uploadTask = storageReference.putFile(image);
-
-    return uploadTask.onComplete;
+    await uploadTask.onComplete;
+    return storageReference.getDownloadURL();
   }
 
   Future<dynamic> getPostImageUri(String postKey) {

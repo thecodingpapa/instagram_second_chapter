@@ -6,6 +6,7 @@ class Post {
   final String userKey;
   final String username;
   final String postImg;
+  final String postUri;
   final List<dynamic> numOfLikes;
   final String caption;
   final String lastCommentor;
@@ -19,6 +20,7 @@ class Post {
       : userKey = map[KEY_USERKEY],
         username = map[KEY_USERNAME],
         postImg = map[KEY_POSTIMG],
+        postUri = map[KEY_POSTURI],
         caption = map[KEY_CAPTION],
         lastComment = map[KEY_LASTCOMMENT],
         lastCommentor = map[KEY_LASTCOMMENTOR],
@@ -33,13 +35,14 @@ class Post {
       : this.fromMap(snapshot.data, snapshot.documentID,
             reference: snapshot.reference);
 
-  static Map<String, dynamic> getMapForNewPost(
-      String userKey, String username, String postImg, String caption) {
+  static Map<String, dynamic> getMapForNewPost(String userKey, String username,
+      String postImg, String postUri, String caption) {
     Map<String, dynamic> map = Map();
 
     map[KEY_USERKEY] = userKey;
     map[KEY_USERNAME] = username;
     map[KEY_POSTIMG] = postImg;
+    map[KEY_POSTURI] = postUri;
     map[KEY_CAPTION] = caption;
     map[KEY_LASTCOMMENT] = "";
     map[KEY_LASTCOMMENTOR] = "";

@@ -85,12 +85,14 @@ class _SharePostPageState extends State<SharePostPage> {
     try {
       final File resized = await compute(getResizedImage, widget.imgFile);
 
-      await storageProvider.uploadImg(resized, getImgPath(widget.postKey));
+      dynamic downloadUri =
+          await storageProvider.uploadImg(resized, getImgPath(widget.postKey));
 
       final Map<String, dynamic> postData = Post.getMapForNewPost(
           widget.user.userKey,
           widget.user.username,
           widget.postKey,
+          downloadUri,
           captionController.text);
       await firestoreProvider.createNewPost(widget.postKey, postData);
       setState(() {
