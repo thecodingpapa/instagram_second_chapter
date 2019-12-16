@@ -74,17 +74,26 @@ class FeedPage extends StatelessWidget {
         _postActions(post.postKey),
         _postLikes(),
         _postCaption(context, post),
-        _allComments()
+        _allComments(post)
       ],
     );
   }
 
-  FlatButton _allComments() => FlatButton(
-      onPressed: null,
-      child: Text(
-        'show all 18 comments',
-        style: TextStyle(color: Colors.grey[600]),
-      ));
+  Widget _allComments(Post post) => Visibility(
+        visible: post.numOfComments > 0 && post.numOfComments != null,
+        child: Consumer<MyUserData>(
+          builder: (context, myUserData, child) {
+            return FlatButton(
+                onPressed: () {
+                  _goToComments(context, myUserData, post.postKey);
+                },
+                child: Text(
+                  'show all ${post.numOfComments} comments',
+                  style: TextStyle(color: Colors.grey[600]),
+                ));
+          },
+        ),
+      );
 
   Padding _postCaption(BuildContext context, Post post) {
     return Padding(
@@ -125,10 +134,7 @@ class FeedPage extends StatelessWidget {
                 color: Colors.black87,
               ),
               onPressed: () {
-                Navigator.of(context)
-                    .push(MaterialPageRoute(builder: (context) {
-                  return CommentsPage(myUserData.data, postKey);
-                }));
+                _goToComments(context, myUserData, postKey);
               },
             );
           },
@@ -150,6 +156,12 @@ class FeedPage extends StatelessWidget {
         ),
       ],
     );
+  }
+
+  _goToComments(BuildContext context, MyUserData myUserData, String postKey) {
+    Navigator.of(context).push(MaterialPageRoute(builder: (context) {
+      return CommentsPage(myUserData.data, postKey);
+    }));
   }
 
   Row _postHeader(String username) {
