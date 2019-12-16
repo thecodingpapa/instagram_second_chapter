@@ -47,18 +47,24 @@ class _CommentsPageState extends State<CommentsPage> {
                 child: Consumer<List<CommentModel>>(
                   builder: (context, commentList, child) {
                     return ListView.separated(
+                        padding: EdgeInsets.symmetric(vertical: common_gap),
                         itemBuilder: (context, index) {
                           CommentModel comment = commentList[index];
-                          return Comment(
-                            username: comment.username,
-                            showProfile: true,
-                            dateTime: comment.commenttime,
-                            caption: comment.comment,
+                          return Padding(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: common_gap),
+                            child: Comment(
+                              username: comment.username,
+                              showProfile: true,
+                              dateTime: comment.commenttime,
+                              caption: comment.comment,
+                            ),
                           );
                         },
                         separatorBuilder: (context, index) {
                           return Divider(
                             thickness: common_gap,
+                            color: Colors.transparent,
                           );
                         },
                         itemCount:
@@ -67,52 +73,56 @@ class _CommentsPageState extends State<CommentsPage> {
                 ),
               ),
             ),
-            Row(
-              children: <Widget>[
-                CircleAvatar(
-                  backgroundImage: NetworkImage(
-                    getProfileImgPath(widget.user.username),
-                  ),
-                  radius: profile_radius,
-                ),
-                Divider(
-                  thickness: common_gap,
-                ),
-                Expanded(
-                  child: TextFormField(
-                    controller: _commentsController,
-                    showCursor: true,
-                    decoration: InputDecoration(
-                      hintText: 'Add a comment...',
-                      border: InputBorder.none,
+            Padding(
+              padding: const EdgeInsets.all(common_gap),
+              child: Row(
+                children: <Widget>[
+                  CircleAvatar(
+                    backgroundImage: NetworkImage(
+                      getProfileImgPath(widget.user.username),
                     ),
-                    validator: (String value) {
-                      if (value.isEmpty) {
-                        return 'Input something!!';
-                      }
-                      return null;
-                    },
+                    radius: profile_radius,
                   ),
-                ),
-                Divider(
-                  thickness: common_gap,
-                ),
-                FlatButton(
-                    onPressed: () {
-                      if (_formKey.currentState.validate()) {
-                        firestoreProvider.createNewComment(
-                            widget.postKey,
-                            CommentModel.getMapForNewComment(
-                                widget.user.userKey,
-                                widget.user.username,
-                                _commentsController.text));
-                      }
-                    },
-                    child: Text(
-                      'Post',
-                      style: Theme.of(context).textTheme.button,
-                    ))
-              ],
+                  SizedBox(
+                    width: common_gap,
+                  ),
+                  Expanded(
+                    child: TextFormField(
+                      controller: _commentsController,
+                      showCursor: true,
+                      decoration: InputDecoration(
+                        hintText: 'Add a comment...',
+                        border: InputBorder.none,
+                      ),
+                      validator: (String value) {
+                        if (value.isEmpty) {
+                          return 'Input something!!';
+                        }
+                        return null;
+                      },
+                    ),
+                  ),
+                  SizedBox(
+                    width: common_gap,
+                  ),
+                  FlatButton(
+                      onPressed: () async {
+                        if (_formKey.currentState.validate()) {
+                          await firestoreProvider.createNewComment(
+                              widget.postKey,
+                              CommentModel.getMapForNewComment(
+                                  widget.user.userKey,
+                                  widget.user.username,
+                                  _commentsController.text));
+                          _commentsController.clear();
+                        }
+                      },
+                      child: Text(
+                        'Post',
+                        style: Theme.of(context).textTheme.button,
+                      ))
+                ],
+              ),
             )
           ],
         ),
