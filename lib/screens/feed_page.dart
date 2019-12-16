@@ -71,8 +71,8 @@ class FeedPage extends StatelessWidget {
       children: <Widget>[
         _postHeader(post.username),
         _postImage(post.postUri),
-        _postActions(post.postKey),
-        _postLikes(),
+        _postActions(post),
+        _postLikes(post),
         _postCaption(context, post),
         _allComments(post)
       ],
@@ -100,61 +100,66 @@ class FeedPage extends StatelessWidget {
       padding: const EdgeInsets.symmetric(
           horizontal: common_gap, vertical: common_xs_gap),
       child: Comment(
-        username: post.lastCommentor,
-        caption: 'I love summer soooooooooooooo much~~~~~~~~~~!!!!',
+        username: Provider.of<MyUserData>(context).data.username,
+        caption: post.caption,
       ),
     );
   }
 
-  Padding _postLikes() {
+  Padding _postLikes(Post post) {
     return Padding(
       padding: const EdgeInsets.only(left: common_gap),
       child: Text(
-        '80 likes',
+        '${post.numOfLikes == null ? 0 : post.numOfLikes.length} likes',
         style: TextStyle(fontWeight: FontWeight.bold),
       ),
     );
   }
 
-  Row _postActions(String postKey) {
-    return Row(
-      children: <Widget>[
-        IconButton(
-          icon: ImageIcon(
-            AssetImage('assets/bookmark.png'),
-            color: Colors.black87,
-          ),
-          onPressed: null,
-        ),
-        Consumer<MyUserData>(
-          builder: (context, myUserData, child) {
-            return IconButton(
+  Widget _postActions(Post post) {
+    return Consumer<MyUserData>(
+      builder: (context, myUserData, child) {
+        return Row(
+          children: <Widget>[
+            IconButton(
+              icon: ImageIcon(
+                AssetImage('assets/bookmark.png'),
+                color: Colors.black87,
+              ),
+              onPressed: null,
+            ),
+            IconButton(
               icon: ImageIcon(
                 AssetImage('assets/comment.png'),
                 color: Colors.black87,
               ),
               onPressed: () {
-                _goToComments(context, myUserData, postKey);
+                _goToComments(context, myUserData, post.postKey);
               },
-            );
-          },
-        ),
-        IconButton(
-          icon: ImageIcon(
-            AssetImage('assets/direct_message.png'),
-            color: Colors.black87,
-          ),
-          onPressed: null,
-        ),
-        Spacer(),
-        IconButton(
-          icon: ImageIcon(
-            AssetImage('assets/heart_selected.png'),
-            color: Colors.redAccent,
-          ),
-          onPressed: null,
-        ),
-      ],
+            ),
+            IconButton(
+              icon: ImageIcon(
+                AssetImage('assets/direct_message.png'),
+                color: Colors.black87,
+              ),
+              onPressed: null,
+            ),
+            Spacer(),
+            IconButton(
+              icon: ImageIcon(
+                AssetImage(post.numOfLikes.contains(myUserData.data.userKey)
+                    ? 'assets/heart_selected.png'
+                    : 'assets/heart.png'),
+                color: Colors.redAccent,
+              ),
+              onPressed: () {
+                firestoreProvider.toggleLike(
+                    post.postKey, myUserData.data.userKey);
+              },
+            ),
+          ],
+        );
+      },
     );
   }
 
