@@ -187,6 +187,23 @@ class FirestoreProvider with Transformer {
         .snapshots()
         .transform(toComments);
   }
+
+  Future<void> toggleLike(String postKey, String userKey) async {
+    final DocumentReference postRef =
+        _firestore.collection(COLLECTION_POSTS).document(postKey);
+    final DocumentSnapshot postSnapshot = await postRef.get();
+    if (postSnapshot.exists) {
+      if (postSnapshot.data[KEY_NUMOFLIKES].contains(userKey)) {
+        postRef.updateData({
+          KEY_NUMOFLIKES: FieldValue.arrayRemove([userKey])
+        });
+      } else {
+        postRef.updateData({
+          KEY_NUMOFLIKES: FieldValue.arrayUnion([userKey])
+        });
+      }
+    }
+  }
 }
 
 FirestoreProvider firestoreProvider = FirestoreProvider();
