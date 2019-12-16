@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:instagram_thecodingpapa/constants/firebase_keys.dart';
+import 'package:instagram_thecodingpapa/data/comment.dart';
 import 'package:instagram_thecodingpapa/data/post.dart';
 import 'package:instagram_thecodingpapa/data/user.dart';
 import 'package:instagram_thecodingpapa/firebase/transformer.dart';
@@ -152,6 +153,39 @@ class FirestoreProvider with Transformer {
       }
       return combinedPosts;
     });
+  }
+
+  Future<Map<String, dynamic>> createNewComment(
+      String postKey, Map<String, dynamic> commentData) async {
+    final DocumentReference postRef =
+        _firestore.collection(COLLECTION_POSTS).document(postKey);
+    final DocumentSnapshot postSnapshot = await postRef.get();
+    final DocumentReference commentRef =
+        postRef.collection(COLLECTION_COMMENTS).document();
+
+    return _firestore.runTransaction((Transaction tx) async {
+      if (postSnapshot.exists) {
+        await tx.set(commentRef, commentData);
+
+        int numOfComments = postSnapshot.data[KEY_NUMOFCOMMENTS];
+        await tx.update(postRef, {
+          KEY_LASTCOMMENT: commentData[KEY_COMMENT],
+          KEY_LASTCOMMENTOR: commentData[KEY_USERNAME],
+          KEY_LASTCOMMENTTIME: commentData[KEY_COMMENTTIME],
+          KEY_NUMOFCOMMENTS: numOfComments + 1
+        });
+      }
+    });
+  }
+
+  Stream<List<CommentModel>> fetchAllComments(String postKey) {
+    return _firestore
+        .collection(COLLECTION_POSTS)
+        .document(postKey)
+        .collection(COLLECTION_COMMENTS)
+        .orderBy(KEY_COMMENTTIME)
+        .snapshots()
+        .transform(toComments);
   }
 }
 

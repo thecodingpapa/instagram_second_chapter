@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:instagram_thecodingpapa/data/comment.dart';
 import 'package:instagram_thecodingpapa/data/post.dart';
 import 'package:instagram_thecodingpapa/data/user.dart';
 
@@ -20,15 +21,14 @@ class Transformer {
     sink.add(users);
   });
 
-
   final toPosts = StreamTransformer<QuerySnapshot, List<Post>>.fromHandlers(
       handleData: (snapshot, sink) {
-        List<Post> posts = [];
-        snapshot.documents.forEach((doc) {
-          posts.add(Post.fromSnapshot(doc));
-        });
-        sink.add(posts);
-      });
+    List<Post> posts = [];
+    snapshot.documents.forEach((doc) {
+      posts.add(Post.fromSnapshot(doc));
+    });
+    sink.add(posts);
+  });
 
   final toUsersExceptMine =
       StreamTransformer<QuerySnapshot, List<User>>.fromHandlers(
@@ -39,5 +39,15 @@ class Transformer {
       if (doc.documentID != user.uid) users.add(User.fromSnapshot(doc));
     });
     sink.add(users);
+  });
+
+  final toComments =
+      StreamTransformer<QuerySnapshot, List<CommentModel>>.fromHandlers(
+          handleData: (snapshot, sink) {
+    List<CommentModel> comments = [];
+    snapshot.documents.forEach((doc) {
+      comments.add(CommentModel.fromSnapshot(doc));
+    });
+    sink.add(comments);
   });
 }
