@@ -4,10 +4,12 @@ import 'package:instagram_thecodingpapa/constants/size.dart';
 import 'package:instagram_thecodingpapa/data/post.dart';
 import 'package:instagram_thecodingpapa/data/provider/my_user_data.dart';
 import 'package:instagram_thecodingpapa/firebase/firestore_provider.dart';
+import 'package:instagram_thecodingpapa/screens/comments_page.dart';
 import 'package:instagram_thecodingpapa/utils/profile_img_path.dart';
 import 'package:instagram_thecodingpapa/widgets/comment.dart';
 import 'package:instagram_thecodingpapa/widgets/my_progress_indicator.dart';
 import 'package:instagram_thecodingpapa/firebase/firebase_storage.dart';
+import 'package:path/path.dart' as prefix0;
 import 'package:provider/provider.dart';
 
 class FeedPage extends StatelessWidget {
@@ -69,7 +71,7 @@ class FeedPage extends StatelessWidget {
       children: <Widget>[
         _postHeader(post.username),
         _postImage(post.postUri),
-        _postActions(),
+        _postActions(post.postKey),
         _postLikes(),
         _postCaption(context, post),
         _allComments()
@@ -105,7 +107,7 @@ class FeedPage extends StatelessWidget {
     );
   }
 
-  Row _postActions() {
+  Row _postActions(String postKey) {
     return Row(
       children: <Widget>[
         IconButton(
@@ -115,12 +117,21 @@ class FeedPage extends StatelessWidget {
           ),
           onPressed: null,
         ),
-        IconButton(
-          icon: ImageIcon(
-            AssetImage('assets/comment.png'),
-            color: Colors.black87,
-          ),
-          onPressed: null,
+        Consumer<MyUserData>(
+          builder: (context, myUserData, child) {
+            return IconButton(
+              icon: ImageIcon(
+                AssetImage('assets/comment.png'),
+                color: Colors.black87,
+              ),
+              onPressed: () {
+                Navigator.of(context)
+                    .push(MaterialPageRoute(builder: (context) {
+                  return CommentsPage(myUserData.data, postKey);
+                }));
+              },
+            );
+          },
         ),
         IconButton(
           icon: ImageIcon(
