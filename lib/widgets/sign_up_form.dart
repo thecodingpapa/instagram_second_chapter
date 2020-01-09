@@ -163,7 +163,8 @@ class _SignUpFormState extends State<SignUpForm> {
     } else {
       await firestoreProvider.attemptCreateUser(
           userKey: user.uid, email: user.email);
-      Provider.of<MyUserData>(context).setNewStatus(MyUserDataStatus.progress);
+      Provider.of<MyUserData>(context, listen: false)
+          .setNewStatus(MyUserDataStatus.progress);
     }
   }
 

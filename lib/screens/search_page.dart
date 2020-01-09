@@ -12,7 +12,7 @@ class SearchPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StreamProvider<List<User>>(
-      builder: (context) => firestoreProvider.fetchAllUsersExceptMine(),
+      create: (context) => firestoreProvider.fetchAllUsersExceptMine(),
       child: Consumer<List<User>>(
         builder: (context, userList, child) {
           return SafeArea(

@@ -155,7 +155,8 @@ class _SigninFormState extends State<SigninForm> {
     if (user == null) {
       simpleSnackbar(context, 'Please try again later!');
     } else {
-      Provider.of<MyUserData>(context).setNewStatus(MyUserDataStatus.progress);
+      Provider.of<MyUserData>(context, listen: false)
+          .setNewStatus(MyUserDataStatus.progress);
     }
   }
 

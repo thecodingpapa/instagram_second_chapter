@@ -10,7 +10,7 @@ import 'package:provider/provider.dart';
 
 void main() {
   return runApp(ChangeNotifierProvider<MyUserData>(
-      builder: (context) => MyUserData(), child: MyApp()));
+      create: (context) => MyUserData(), child: MyApp()));
 }
 
 class MyApp extends StatelessWidget {

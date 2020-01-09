@@ -27,7 +27,7 @@ class ProfileSideMenu extends StatelessWidget {
           ),
           FlatButton.icon(
               onPressed: () {
-                Provider.of<MyUserData>(context).clearUser();
+                Provider.of<MyUserData>(context, listen: false).clearUser();
                 FirebaseAuth.instance.signOut();
               },
               icon: Icon(Icons.exit_to_app),
