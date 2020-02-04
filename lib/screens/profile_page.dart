@@ -42,8 +42,8 @@ class _ProfilePageState extends State<ProfilePage>
       backgroundColor: Colors.grey[200],
       body: Stack(
         children: <Widget>[
-          _sideMenu(),
           _profile(),
+          _sideMenu(),
         ],
       ),
     );
@@ -128,7 +128,7 @@ class _ProfilePageState extends State<ProfilePage>
         shrinkWrap: true,
         crossAxisCount: 3,
         childAspectRatio: 1,
-        children: List.generate(30, (index) => _gridImgItem(index)),
+        children: List.generate(1, (index) => _gridImgItem(index)),
       );
 
   CachedNetworkImage _gridImgItem(int index) => CachedNetworkImage(
